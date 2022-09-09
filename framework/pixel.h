@@ -3,7 +3,7 @@
 
 class Pixel{
     private:
-    int pos_x, _pos_y, _R, _G, _B, _A;
+    int pos_x, _pos_y
 
     int FindPixel(void){};
     void PutPixel(void){};

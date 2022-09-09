@@ -6,10 +6,10 @@ int Pixel::FindPixel(void){
     return this->_pos.x*4 + this->_pos.y*IMAGE_WIDTH*4;
 }
 
-void Pixel::PutPixel(void){
+void Pixel::PutPixel(int _R, _G, _B, _A){
     int MemPos = this->FindPixel();
-    FBptr[MemPos] = this->_R;
-    FBptr[MemPos + 1] = this->_G;
-    FBptr[MemPos + 2] = this->_B;
-    FBptr[MemPos + 3] = this->_A;
+    FBptr[MemPos] = _R;
+    FBptr[MemPos + 1] = _G;
+    FBptr[MemPos + 2] = _B;
+    FBptr[MemPos + 3] = _A;
 }
