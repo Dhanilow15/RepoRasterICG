@@ -1,6 +1,11 @@
 #ifndef _MYGL_H_
 #define _MYGL_H_
 
+#define _R 255
+#define _G 255
+#define _B 255
+#define _A 255
+
 #include "definitions.h"
 
 //-----------------------------------------------------------------------------
@@ -11,7 +16,7 @@ int find_pixel(int pos_x, int pos_y){
     return pos_x*4 + pos_y*IMAGE_WIDTH*4;
 }
 
-void put_pixel(int pos_x, int pos_y, int _R, int _G, int _B, int _A){
+void put_pixel(int pos_x, int pos_y){
     int MemPos = find_pixel(pos_x, pos_y);
     FBptr[MemPos] = _R;
     FBptr[MemPos + 1] = _G;
@@ -43,7 +48,7 @@ void bresenham1(int x1, int y1, int x2, int y2){
         d = 2 * dy - dx;
         y = y1;       
         for (x = x1; x <= x2; x++){
-            put_pixel(x, y, 155, 0, 255, 255);
+            put_pixel(x, y);
             if (d <= 0){
               d += incE;
             }
@@ -53,6 +58,14 @@ void bresenham1(int x1, int y1, int x2, int y2){
             }
         }
   }
+
+void triangle(int *ponto1, int *ponto2, int *ponto3){
+    //cada ponto tera um x,y e se ligara ao outro
+
+    bresenham1(ponto1[0], ponto1[1], ponto2[0], ponto2[1]);
+    bresenham1(ponto2[0], ponto2[1], ponto3[0], ponto3[1]);
+    bresenham1(ponto3[0], ponto3[1], ponto1[0], ponto1[1]);
+}
 //*****************************************************************************
 
 
