@@ -1,0 +1,236 @@
+O algoritmo de Bresenham — em homenagem a Jack Elton Bresenham — é um algoritmo criado para o desenho de linhas, em dispositivos matriciais (como por exemplo, um monitor), que permite determinar quais os pontos numa matriz de base quadriculada que devem ser destacados para atender o grau de inclinação de um ângulo.
+
+O Código
+
+void bresenham1(int x1, int y1, int x2, int y2){        
+        int slope;
+        int dx, dy, incE, incNE, d, x, y;
+        // Onde inverte a linha x1 > x2       
+        if (x1 > x2){
+            bresenham1(x2, y2, x1, y1);
+             return;
+        }        
+        dx = x2 - x1;
+        dy = y2 - y1;
+    
+        if (dy < 0){            
+            slope = -1;
+            dy = -dy;
+        }
+        else{            
+           slope = 1;
+        }
+        // Constante de Bresenham
+        incE = 2 * dy;
+        incNE = 2 * dy - 2 * dx;
+        d = 2 * dy - dx;
+        y = y1;       
+        for (x = x1; x <= x2; x++){
+            putpixel(x, y);
+            if (d <= 0){
+              d += incE;
+            }
+            else{
+              d += incNE;
+              y += slope;
+            }
+        }
+  }
+
+Detalhes sobre o DDA Inteiro de Retas
+Como eu uso esse método?
+
+Normalmente eu crio uma classe “Reta” com os atributos Ponto p1 e p2 
+(os pontos inicial e final da reta), o seu método construtor que recebe o
+ ponto inicial e o final; e este método “draw” para desenhar a reta.
+
+
+Importante notar que este método de desenho recebe como parâmetro o 
+elemento Graphics g, onde o desenho de cada ponto da reta vai acontecer e
+ o método tem a seguinte chamada:
+
+
+
+Reta r;
+r = new Reta(p1,p2);
+r.draw(g);
+
+
+O Ponto é definido com os atributos x e y e também possui um método 
+para se desenhar, o draw(Graphics g). Neste método, uso o método default
+ do java para desenhar retas, porém desenhando um ponto:
+
+
+
+public void draw(Graphics g){
+ g.setColor(Color.black);
+ g.drawLine(x,y,x,y);
+}
+
+
+
+
+Variáveis no Bresenham
+
+Nas primeiras linhas, apenas a definição das variáveis acontece. Os 
+deltas servem para controlar os 4 possíveis casos do algoritmo de 
+Bresenham; x e y vão definir os pontos da reta a ser desenhada; e erro é
+ uma variável de controle sobre como proceder com x e y a cada ponto 
+desenhado:
+
+
+
+
+    incrementar x?
+
+    incrementar y?
+
+    incrementar x e y?
+
+    decrementar…?
+
+
+O seu valor muda somando ou subtraindo os deltas em seu valor atual. Mais explicações na sequência neste artigo.
+
+
+
+
+Ordem dos Pontos
+
+Nas linhas de 9 a 16, o algoritmo procura atender uma premissa para 
+seu funcionamento correto: fazer com que os valores de y caminhem do 
+menor para o maior entre os pontos da reta.
+
+
+
+
+DDA Inteiro: Linhas 18~72
+
+O algoritmo de Bresenham é dividido em 4 casos. O que define cada um é
+ a identificação do maior delta (X ou Y), considerando também se deltaX é
+ positivo ou negativo.
+
+
+
+Por que procura-se o maior delta? O maior delta define em qual eixo 
+(abcissas ou ordenadas) está o maior caminho a ser percorrido, pois o 
+loop (for (…)) deverá conter tantas execuções quanto forem necessários 
+pontos para se desenhar a reta percorrendo essa maior distância, pois 
+cada loop desenha um único ponto.
+
+
+
+E qual a importância do “sinal” do deltaX? Como nas linhas 9 a 16 o 
+algoritmo força que a reta seja desenhada de tal forma que se vá do 
+menor para o maior y, pode acontecer que o x varie do maior para o menor
+ ao longo do desenho, e isso influi diretamente no incremento ou 
+decremento de X, bem como no sinal do deltaX utilizado no cálculo do 
+erro.
+
+
+
+Ou seja, se o desenho da reta vai começar pelo maior x e ele é 
+incrementado, nunca será alcançado o menor x e a reta seria desenhada de
+ forma errada. E, quando deltaX>=0, significa que x1<x2 (então 
+desenha-se do menor x para o maior x), enquanto deltaX<0 é resultado 
+de x2<x1 (maior x para o menor x).
+
+
+
+E por isso a diferença entre incrementar ou decrementar o valor de x nos casos do algoritmo DDA Inteiro:
+
+
+
+
+    Se x2>x1, x++;
+
+    Se x1>x2, x- -;
+
+
+A variação do sinal do deltaX se define de modo análogo:
+
+
+
+
+    Se deltaX>=0, subtrai-se deltaX;
+
+    Se deltaX<0, soma-se o deltaX (no fim, está sendo somado um número negativo, ou seja, uma subtração);
+
+
+O objetivo é que o deltaX seja sempre subtraído no valor do erro, mas
+ se ele for negativo, a subtração de um valor negativo, resulta em uma 
+soma, daí a variação no sinal de deltaX quando é calculado o erro. Como é
+ sempre definido que y2>y1, deltaY será sempre positivo (ou zero) e 
+basta sempre somar seu valor no erro.
+
+
+
+O detalhe sobre a variação do erro é que ele decide quando variar x e
+ y baseado nos deltas. A coordenada de maior delta deve variar 
+(incrementar ou decrementar) mais vezes, pois tem um caminho maior a 
+percorrer. O que o erro faz é controlar quantas vezes a mais uma 
+variável é incrementada ou decrementada em relação a outra.
+
+
+
+E assim mantém-se a coerência no algoritmo para o desenho de retas.
+
+
+
+Detalhe importante: nas linhas 17 e 73 está o desenho do primeiro e último pontos, respectivamente.
+
+
+
+Para finalizar, teste isso tudo em um JPanel no método paint(Graphics g):
+
+
+
+public class Canvas extends JPanel{
+  public Canvas(){
+  ...
+ }
+ public void paint(Graphics g){
+  super.paint(g);
+  new Reta(new Ponto(15,10), new Ponto(400,200)).draw(g);
+ }
+}
+
+
+
+
+
+Marcadores
+Algoritmo de Bresenham
+Computação Gráfica
+Marcadores: Algoritmo de Bresenham Computação Gráfica
+Comentários
+
+    Anônimo23 de janeiro de 2022 11:11
+
+    Queen Casino - Free Slots, No Deposit Bonus & Review - Konicasino
+    Queen Casino Review. Casino Welcome Bonus. 100% 더킹카지노 Welcome bonus up rb88 to $300 plus 100 free spins. Free Spins for New クイーンカジノ players. No Deposit Required.
+    Responder
+
+Postar um comentário
+
+Postagens mais visitadas deste blog
+As 7 principais linguagens de programação usadas em desenvolvimento mobile
+fevereiro 24, 2018
+A multiplicidade de linguagens para a criação de softwares e aplicativos é gigantesca. Inserido nesse universo recheado de idiomas, digno de séries e filmes cultuados como “Star Trek” e “Star Wars”, o programador deve escolher precisamente a opção mais adequada ao objetivo final. Não somos tão sábios quanto Mestre Yoda e Spock, mas vamos te dar uma força e explicar quais as linguagens de programação mais usadas em desenvolvimento mobile. Siga-nos nessa jornada! Java Adquirida pela Oracle, é a linguagem mais utilizada por programadores ao redor do mundo. Orientado a objetos, o Java é compilado e flexível, podendo ser executada tanto numa janela de navegador quanto em aparelhos sem browser. Outra grande vantagem da linguagem Java é a capacidade multiplataforma, cujo código é executado com especial sucesso em sistemas Android e Windows. Ainda assim, quando fala-se em desenvolvimento mobile no Brasil, com a salada mista de SO nos smartphones e tablets, dependendo
+1 comentário
+Leia mais
+Apple volta a ser a maior marca de wearables do mundo
+novembro 14, 2017
+Segundo o Canalys , a Apple voltou a ser a maior marca de wearables (dispositivos que podem ser usados como peças de vestuário) do mundo. No último trimestre, a empresa vendeu 3,9 milhões de unidades do Apple Watch. Em segundo lugar, veio a Xiaomi , que vendeu 3,6 milhões Mi Bands, e em terceiro a Fitbit , que conseguiu vender 3,5 milhões de unidades do Alta. No começo do ano, a Apple tinha sido superada pela Xiaomi. Contudo, o lançamento do novo Apple Watch fez com que a Maçã voltasse para a liderança.
+1 comentário
+Leia mais
+Quem sou eu
+
+Vitor Leal
+
+Visitar perfil
+Arquivo
+Marcadores
+Denunciar abuso
+Tecnologia do Blogger
+Vitor Zehel

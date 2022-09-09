@@ -7,17 +7,52 @@
 void MyGlDraw(void);
 
 //*****************************************************************************
-int FindPixel(int pos_x, int pos_y){
+int find_pixel(int pos_x, int pos_y){
     return pos_x*4 + pos_y*IMAGE_WIDTH*4;
 }
 
-void PutPixel(int pos_x, int pos_y, int _R, int _G, int _B, int _A){
-    int MemPos = FindPixel(pos_x, pos_y);
+void put_pixel(int pos_x, int pos_y, int _R, int _G, int _B, int _A){
+    int MemPos = find_pixel(pos_x, pos_y);
     FBptr[MemPos] = _R;
     FBptr[MemPos + 1] = _G;
     FBptr[MemPos + 2] = _B;
     FBptr[MemPos + 3] = _A;
 }
+
+void bresenham1(int x1, int y1, int x2, int y2){        
+        int slope;
+        int dx, dy, incE, incNE, d, x, y;
+        // Onde inverte a linha x1 > x2       
+        if (x1 > x2){
+            bresenham1(x2, y2, x1, y1);
+             return;
+        }        
+        dx = x2 - x1;
+        dy = y2 - y1;
+    
+        if (dy < 0){            
+            slope = -1;
+            dy = -dy;
+        }
+        else{            
+           slope = 1;
+        }
+        // Constante de Bresenham
+        incE = 2 * dy;
+        incNE = 2 * dy - 2 * dx;
+        d = 2 * dy - dx;
+        y = y1;       
+        for (x = x1; x <= x2; x++){
+            put_pixel(x, y, 155, 0, 255, 255);
+            if (d <= 0){
+              d += incE;
+            }
+            else{
+              d += incNE;
+              y += slope;
+            }
+        }
+  }
 //*****************************************************************************
 
 

@@ -11,7 +11,7 @@ int main(int argc, char **argv)
 	InitDataStructures();
 
 	// Ajusta a função que chama as funções do mygl.h
-	DrawFunc = MyGlDraw;	
+	DrawFunc = MyGlDraw;
 
 	// Framebuffer scan loop.
 	glutMainLoop();
