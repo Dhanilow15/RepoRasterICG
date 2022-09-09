@@ -7,7 +7,17 @@
 void MyGlDraw(void);
 
 //*****************************************************************************
-// Defina aqui as suas funções gráficas
+int FindPixel(int pos_x, int pos_y){
+    return pos_x*4 + pos_y*IMAGE_WIDTH*4;
+}
+
+void PutPixel(int pos_x, int pos_y, int _R, int _G, int _B, int _A){
+    int MemPos = FindPixel(pos_x, pos_y);
+    FBptr[MemPos] = _R;
+    FBptr[MemPos + 1] = _G;
+    FBptr[MemPos + 2] = _B;
+    FBptr[MemPos + 3] = _A;
+}
 //*****************************************************************************
 
 
