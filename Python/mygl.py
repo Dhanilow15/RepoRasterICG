@@ -1,4 +1,5 @@
 import atexit
+import numpy as np
 
 from definitions import *
 
@@ -17,7 +18,8 @@ def draw_func(func):
 
 def my_gl_draw(point1=None, point2=None, point3=None):
     """
-    Draw a point, line, or triangle
+    Draw a point, line, or triangle.
+
     :param point1: first point
     :param point2: second point
     :param point3: third point
@@ -34,41 +36,39 @@ def my_gl_draw(point1=None, point2=None, point3=None):
         draw_pixel(point1)
 
     if point3:
+        points = [point1, point2, point3]
+        try:
+            verify_triangle(points)
+        except TypeError:
+            raise "These coordinates does not draw a triangle, but a line."
         triangle(point1, point2, point3)
 
 
-def verify_multiple(*args: int) -> bool:
+def verify_triangle(points: []) -> bool:
     """
-    Verify if the bigger number is multiple of the others
-    :param args: numbers
-    :return: True if they are, False if not
+    Verify if the coordinates list parameter do draw a triangle.
+
+    :param points: (list) A list of coordinate tuples.
+    :return: True if triangle, else returns false.
     """
-    numbers = sorted(args, reverse=True)
-    if len(numbers) == 1:
+    if len(points) != 3:
+        return False
+
+    testTriangle = np.array([[points[0]], points[1], points[2]])
+    if np.linalg.det(testTriangle):
         return True
-    multiples = 0
-
-    for x in numbers:
-        assert type(x) == int
-        if numbers[-1] % x == 0:
-            multiples += 1
-
-    if multiples == len(numbers):
-        return True
-
-    return False
+    else:
+        return False
 
 
 def triangle(point1: tuple, point2: tuple, point3: tuple):
     """
-    Verifies if the points are not all in the same line and then draws a triangle with 3 points
+    Draws a triangle with 3 points
     :param point1: first point
     :param point2: second point
     :param point3: third point
     :return: None
     """
-    assert not (verify_multiple(point1[0], point2[0], point3[0]) * verify_multiple(point1[1], point2[1], point3[1]))
-
     bresenham(point1, point2)
     bresenham(point2, point3)
     bresenham(point3, point1)
