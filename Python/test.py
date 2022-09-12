@@ -1,2 +1,1 @@
-tupla = (1,0)
-print(tupla[0])
+print(False % True)
