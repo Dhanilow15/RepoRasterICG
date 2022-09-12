@@ -24,7 +24,7 @@ def my_gl_draw(point1=None, point2=None, point3=None):
     :return: None
     """
     try:
-        point1 == ()
+        point1 is not None
     except TypeError:
         raise "First parameter cannot be None. Need at least one point to work!"
 
@@ -75,8 +75,30 @@ def triangle(point1: tuple, point2: tuple, point3: tuple):
 
 
 def display():
-    pass
+    draw_func(my_gl_draw())
+    glBindTexture(GL_TEXTURE_2D, dt.tex)
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, dt.image_width, dt.image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dt.fb)
 
+    glEnable(GL_TEXTURE_2D)
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    glClearColor(0.0, 0.0, 0.0, 1.0)
+
+    glViewport(0, 0, dt.image_width, dt.image_height)
+
+    glBegin(GL_TRIANGLES)
+        glTexCoord2f(0.0, 1.0)
+        glVertex3f(-1.0, -1.0, 0.0)
+        glTexCoord2f(1.0, 0.0)
+        glVertex3f(1.0, 1.0, 0.0)
+        glTexCoord2f(0.0, 0.0)
+        glVertex3f(-1.0, 1.0, 0.0)
+        glTexCoord2f(0.0, 1.0)
+        glVertex3f(-1.0, -1.0, 0.0)
+        glTexCoord2f(1.0, 1.0)
+        glVertex3f(1.0, -1.0, 0.0)
+        glTexCoord2f(1.0, 0.0)
+        glVertex3f(1.0, 1.0, 0.0)
 
 def init_call_backs():
     glutDisplayFunc(display)
