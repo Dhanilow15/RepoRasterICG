@@ -4,7 +4,7 @@ import numpy as np
 from definitions import *
 
 dt = DataStructures(500, 500, [], [])
-# dt.init_frame_buffer()
+dt.init_frame_buffer()
 
 _r = 255
 _g = 255
@@ -39,7 +39,7 @@ def my_gl_draw(point1=None, point2=None, point3=None):
         points = [point1, point2, point3]
         try:
             verify_triangle(points)
-        except TypeError:
+        except ValueError:
             raise "These coordinates does not draw a triangle, but a line."
         triangle(point1, point2, point3)
 
@@ -87,18 +87,27 @@ def display():
     glViewport(0, 0, dt.image_width, dt.image_height)
 
     glBegin(GL_TRIANGLES)
-        glTexCoord2f(0.0, 1.0)
-        glVertex3f(-1.0, -1.0, 0.0)
-        glTexCoord2f(1.0, 0.0)
-        glVertex3f(1.0, 1.0, 0.0)
-        glTexCoord2f(0.0, 0.0)
-        glVertex3f(-1.0, 1.0, 0.0)
-        glTexCoord2f(0.0, 1.0)
-        glVertex3f(-1.0, -1.0, 0.0)
-        glTexCoord2f(1.0, 1.0)
-        glVertex3f(1.0, -1.0, 0.0)
-        glTexCoord2f(1.0, 0.0)
-        glVertex3f(1.0, 1.0, 0.0)
+    glTexCoord2f(0.0, 1.0)
+    glVertex3f(-1.0, -1.0, 0.0)
+    glTexCoord2f(1.0, 0.0)
+    glVertex3f(1.0, 1.0, 0.0)
+    glTexCoord2f(0.0, 0.0)
+    glVertex3f(-1.0, 1.0, 0.0)
+    glTexCoord2f(0.0, 1.0)
+    glVertex3f(-1.0, -1.0, 0.0)
+    glTexCoord2f(1.0, 1.0)
+    glVertex3f(1.0, -1.0, 0.0)
+    glTexCoord2f(1.0, 0.0)
+    glVertex3f(1.0, 1.0, 0.0)
+    glEnd()
+
+    glBindTexture(GL_TEXTURE_2D, 0)
+    glDisable(GL_TEXTURE_2D)
+
+    glFlush()
+    glutSwapBuffers()
+    glutPostRedisplay()
+
 
 def init_call_backs():
     glutDisplayFunc(display)
@@ -106,7 +115,7 @@ def init_call_backs():
 
 def init_window():
     """
-    initializes a Opengl window
+    initializes an Opengl window
     :return: None
     """
     glutInit()

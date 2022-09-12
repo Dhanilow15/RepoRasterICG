@@ -16,7 +16,7 @@ class DataStructures:
         return "the image is" + str(self.image_width) + "x" + str(self.image_height)
 
     def init_frame_buffer(self):
-        self.fb = [None] * self.image_width * self.image_height
+        self.fb = [None] * self.image_width * self.image_height * 5
         
         for i in range(self.image_height * self.image_width):
             self.fb[i * 4 + 0] = 0

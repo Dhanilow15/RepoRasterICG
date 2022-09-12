@@ -1,6 +1,6 @@
 from mygl import *
 
 init_window()
-draw_func()
+init_call_backs()
 
 glutMainLoop()

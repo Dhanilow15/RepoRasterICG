@@ -1,1 +1,2 @@
-print(None == ())
+fb = [None] * 4
+print(fb)
