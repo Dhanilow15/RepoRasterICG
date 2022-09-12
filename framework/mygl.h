@@ -33,7 +33,7 @@ void bresenham1(int x1, int y1, int x2, int y2){
              return;
         }        
         dx = x2 - x1;
-        dy = y2 - y1;
+            ;
     
         if (dy < 0){            
             slope = -1;

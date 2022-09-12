@@ -12,6 +12,7 @@ void MyGlDraw(void)
     ponto3[0] = 150;
     ponto3[1] = 150;
     triangle(ponto1, ponto2, ponto3);
+    
     ponto1[0] = 200;
     ponto1[1] = 200;
     ponto2[0] = 300;
