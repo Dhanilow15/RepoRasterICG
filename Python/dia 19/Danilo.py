@@ -9,43 +9,48 @@ import numpy as np
 import ctypes
 
 
+def create_shader(vertexFilepath, fragmentFilepath):
+    """
+    Compiles and creates a OpenGL shader from vertex and fragment file path
+    :param vertexFilepath:
+    :param fragmentFilepath:
+    :return: Shader
+    """
+    with open(vertexFilepath, 'r') as f:
+        vertex_src = f.readlines()
+    with open(fragmentFilepath, 'r') as f:
+        fragment_src = f.readlines()
+
+    shader = compileProgram(
+        compileShader(vertex_src, GL_VERTEX_SHADER),
+        compileShader(fragment_src, GL_FRAGMENT_SHADER)
+    )
+
+    return shader
+
+
 class App:
 
-    def __init__(self):
+    def __init__(self, vertices=(
+            -0.5, -0.5, 0.0, 1.0, 0.0, 0.0,
+            0.5, -0.5, 0.0, 0.0, 1.0, 0.0,
+            0.0, -1.0, 0.0, 0.0, 0.0, 1.0
+    )):
         """
         Initializing Python and OpenGL
         """
         # initializing python
         pg.init()
-        display = (520, 520)
+        display = (600, 600)
         pg.display.set_mode(display, DOUBLEBUF | OPENGL)
         #   pg.display._set_caption("Sample OpenGL")
         self.clock = pg.time.Clock()
         # initializing OpenGL
         glClearColor(0, 0, 0, 1)
-        self.shader = self.create_shader("shaders/vertex.txt", "shaders/fragment.txt")
+        self.shader = create_shader("shaders/vertex.txt", "shaders/fragment.txt")
         glUseProgram(self.shader)
-        self.triangle = Triangle()
+        self.triangle = Triangle(vertices)
         self.main_loop()
-
-    def create_shader(self, vertexFilepath, fragmentFilepath):
-        """
-        Compiles and creates a OpenGL shader from vertex and fragment file path
-        :param vertexFilepath:
-        :param fragmentFilepath:
-        :return: Shader
-        """
-        with open(vertexFilepath, 'r') as f:
-            vertex_src = f.readlines()
-        with open(fragmentFilepath, 'r') as f:
-            fragment_src = f.readlines()
-
-        shader = compileProgram(
-            compileShader(vertex_src, GL_VERTEX_SHADER),
-            compileShader(fragment_src, GL_FRAGMENT_SHADER)
-        )
-
-        return shader
 
     def main_loop(self):
         """
@@ -80,13 +85,9 @@ class App:
 
 
 class Triangle:
-    def __init__(self):
+    def __init__(self, vertices):
         """x, y, z, r, g, b"""
-        self.vertices = (
-            -0.5, -0.5, 0.0, 1.0, 0.0, 0.0,
-            0.5, -0.5, 0.0, 0.0, 1.0, 0.0,
-            0.0, -1.0, 0.0, 0.0, 0.0, 1.0
-        )
+        self.vertices = vertices
         self.vertices = np.array(self.vertices, dtype=np.float32)
         self.vertices_count = 3
 
@@ -114,4 +115,8 @@ class Triangle:
 
 
 if __name__ == "__main__":
-    myApp = App()
+    myApp = App((
+        -0.5, -0.5, 0.0, 1.0, 0.0, 0.0,
+        0.5, -0.5, 0.0, 0.0, 1.0, 0.0,
+        0.0, -1.0, 0.0, 0.0, 0.0, 1.0
+    ))

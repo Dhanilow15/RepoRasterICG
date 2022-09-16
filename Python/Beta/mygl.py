@@ -1,19 +1,16 @@
 import atexit
+from typing import List
+
 import numpy as np
 
 from definitions import *
 
-dt = DataStructures(500, 500, [], [])
-dt.init_frame_buffer()
 
+dt = DataStructures(600, 600, [], [])
 _r = 255
 _g = 255
 _b = 255
 _a = 255
-
-
-def draw_func(func):
-    func()
 
 
 def my_gl_draw(point1=None, point2=None, point3=None):
@@ -74,61 +71,62 @@ def triangle(point1: tuple, point2: tuple, point3: tuple):
     bresenham(point3, point1)
 
 
-def display():
-    draw_func(my_gl_draw())
-    glBindTexture(GL_TEXTURE_2D, dt.tex)
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, dt.image_width, dt.image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dt.fb)
+def init_opengl():
 
-    glEnable(GL_TEXTURE_2D)
+    glutInit()
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB)
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-    glClearColor(0.0, 0.0, 0.0, 1.0)
+    screen_width = glutGet(GLUT_SCREEN_WIDTH)
+    screen_height = glutGet(GLUT_SCREEN_HEIGHT)
 
-    glViewport(0, 0, dt.image_width, dt.image_height)
+    glutInitWindowPosition((screen_width - dt.image_width) // 2,
+                           (screen_height - dt.image_width) // 2)
 
-    glBegin(GL_TRIANGLES)
-    glTexCoord2f(0.0, 1.0)
-    glVertex3f(-1.0, -1.0, 0.0)
-    glTexCoord2f(1.0, 0.0)
-    glVertex3f(1.0, 1.0, 0.0)
-    glTexCoord2f(0.0, 0.0)
-    glVertex3f(-1.0, 1.0, 0.0)
-    glTexCoord2f(0.0, 1.0)
-    glVertex3f(-1.0, -1.0, 0.0)
-    glTexCoord2f(1.0, 1.0)
-    glVertex3f(1.0, -1.0, 0.0)
-    glTexCoord2f(1.0, 0.0)
-    glVertex3f(1.0, 1.0, 0.0)
+    glutInitWindowSize(dt.image_width, dt.image_height)
+
+    glutCreateWindow("Meu primeiro app com OpenGL em Python")
+
+
+def initialize():
+    glClearColor(1.0, 1.0, 1.0, 1.0)
+    glMatrixMode(GL_PROJECTION)
+    gluOrtho2D(0, dt.image_width, 0, dt.image_height)
+
+
+def draws():
+    # Limpa a janela de visualização com a cor
+    # de fundo definida previamente
+    glClear(GL_COLOR_BUFFER_BIT)
+
+    # Altera a cor do desenho para vermelho
+    glColor3f(0.0, 0.0, 0.0)
+
+    glPointSize(5.0)
+
+    glBegin(GL_POINTS)
+    glVertex2f(200, 200)
+    glVertex2f(400, 200)
+    glVertex2f(400, 300)
+    glVertex2f(200, 300)
+    glVertex2f(200, 400)
+    glVertex2f(400, 400)
     glEnd()
 
-    glBindTexture(GL_TEXTURE_2D, 0)
-    glDisable(GL_TEXTURE_2D)
+    glColor3f(1.0, 0.0, 0.0)
+    glLineWidth(3.0)  # aumenta a espessura das linhas
+    glBegin(GL_LINES)
+    # glBegin(GL_LINE_STRIP)
+    # glBegin(GL_LINE_LOOP)
+    glVertex2f(200, 200)
+    glVertex2f(400, 200)
+    glVertex2f(400, 300)
+    glVertex2f(200, 300)
+    glVertex2f(200, 400)
+    glVertex2f(400, 400)
+    glEnd()
 
+    # Executa os comandos OpenGL
     glFlush()
-    glutSwapBuffers()
-    glutPostRedisplay()
-
-
-def init_call_backs():
-    glutDisplayFunc(display)
-
-
-def init_window():
-    """
-    initializes an Opengl window
-    :return: None
-    """
-    glutInit()
-    glutInitDisplayMode(GLUT_RGBA)
-    glutInitWindowSize(dt.image_width, dt.image_height)
-    glutInitWindowPosition(100, 100)
-    glutCreateWindow("My OpenGL")
-
-    glMatrixMode(GL_PROJECTION)
-    glLoadIdentity()
-    glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0)
-    glMatrixMode(GL_MODELVIEW)
-    glLoadIdentity()
 
 
 def find_pixel(point: tuple):

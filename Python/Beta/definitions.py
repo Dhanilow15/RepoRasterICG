@@ -6,7 +6,7 @@ import atexit
 
 
 @dataclass
-class DataStructures:
+class DataStructures():
     image_width: int
     image_height: int
     fb: []
