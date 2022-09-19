@@ -7,6 +7,8 @@
 #define _A 255
 
 #include "definitions.h"
+#include <math.h>
+using namespace std;
 
 //-----------------------------------------------------------------------------
 void MyGlDraw(void);
@@ -23,41 +25,38 @@ void put_pixel(int pos_x, int pos_y){
     FBptr[MemPos + 2] = _B;
     FBptr[MemPos + 3] = _A;
 }
+ 
+// function for line generation
+void bresenham1(int x1, int y1, int x2, int y2)
+{
+    int deltaY = y2 - y1;
+    int deltaX = x2 - x1;
 
-void bresenham1(int x1, int y1, int x2, int y2){        
-        int slope;
-        int dx, dy, incE, incNE, d, x, y;
-        // Onde inverte a linha x1 > x2       
-        if (x1 > x2){
-            bresenham1(x2, y2, x1, y1);
-             return;
-        }        
-        dx = x2 - x1;
-            ;
-    
-        if (dy < 0){            
-            slope = -1;
-            dy = -dy;
+    if(x1 > x2 || y1 > y2){
+        bresenham1(x2, y2, x1, y1);
+    }
+
+    if(deltaX == 0){
+        for (int i = y1; i <= y2; i++){
+            put_pixel(x1, i);
         }
-        else{            
-           slope = 1;
+    }
+    else if(deltaY == 0){
+        for (int i = x1; i <= x2; i++){
+            put_pixel(i, y1);
         }
-        // Constante de Bresenham
-        incE = 2 * dy;
-        incNE = 2 * dy - 2 * dx;
-        d = 2 * dy - dx;
-        y = y1;       
-        for (x = x1; x <= x2; x++){
-            put_pixel(x, y);
-            if (d <= 0){
-              d += incE;
-            }
-            else{
-              d += incNE;
-              y += slope;
-            }
+    }
+    else{
+        float coeficienteAngular = deltaY/deltaX;
+        float coeficienteLinear = y1 - coeficienteAngular*float(x1);
+
+        for (int i = x1; i <= x2; i++){
+            int j = round(coeficienteAngular*float(i) + coeficienteLinear);
+            //printf("%d e %d", i, j);
+            put_pixel(i, j);
         }
-  }
+    }
+}
 
 void triangle(int *ponto1, int *ponto2, int *ponto3){
     //cada ponto tera um x,y e se ligara ao outro
