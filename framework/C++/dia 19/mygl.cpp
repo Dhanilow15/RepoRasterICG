@@ -1,5 +1,5 @@
 #include "definitions.h"
-
+#include "mygl.h"
 //-----------------------------------------------------------------------------
 void MyGlDraw(void)
 {
