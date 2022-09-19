@@ -33,18 +33,18 @@ void draw_line(int x1, int y1, int x2, int y2)
     int deltaY = y2 - y1;
     int deltaX = x2 - x1;
 
-    if(x1 > x2 || y1 > y2){
+    if(x1 > x2){
         draw_line(x2, y2, x1, y1);
         return;
     }
 
-    // x = 0
+    // reta vertical
     if(deltaX == 0){
         for (int i = y1; i <= y2; i++){
             put_pixel(x1, i);
         }
     }
-    // y = 0
+    // reta horizontal
     else if(deltaY == 0){
         for (int i = x1; i <= x2; i++){
             put_pixel(i, y1);
@@ -68,7 +68,7 @@ void draw_triangle(int *ponto1, int *ponto2, int *ponto3){
 
     draw_line(ponto1[0], ponto1[1], ponto2[0], ponto2[1]);
     draw_line(ponto2[0], ponto2[1], ponto3[0], ponto3[1]);
-    //draw_line(ponto3[0], ponto3[1], ponto1[0], ponto1[1]);
+    draw_line(ponto3[0], ponto3[1], ponto1[0], ponto1[1]);
 
 }
 //*****************************************************************************

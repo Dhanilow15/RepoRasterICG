@@ -17,7 +17,7 @@ void MyGlDraw(void)
     //House polygons
     draw_triangle(ponto1, ponto2, ponto3);
     //draw_line(225, 225, 175, 150);
-    //rectangle(ponto4, 100, 100);
+    //draw_rectangle(ponto4, 100, 100);
     //************************************************************************* 
 
 }
