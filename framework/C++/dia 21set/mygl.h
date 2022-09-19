@@ -27,26 +27,30 @@ void put_pixel(int pos_x, int pos_y){
 }
  
 // function for line generation
-void bresenham1(int x1, int y1, int x2, int y2)
+void draw_line(int x1, int y1, int x2, int y2)
 {
+    // desenha a linha encontrando a equacao da reta entre elas
     int deltaY = y2 - y1;
     int deltaX = x2 - x1;
 
     if(x1 > x2 || y1 > y2){
-        bresenham1(x2, y2, x1, y1);
+        draw_line(x2, y2, x1, y1);
         return;
     }
 
+    // x = 0
     if(deltaX == 0){
         for (int i = y1; i <= y2; i++){
             put_pixel(x1, i);
         }
     }
+    // y = 0
     else if(deltaY == 0){
         for (int i = x1; i <= x2; i++){
             put_pixel(i, y1);
         }
     }
+    // encontrando a equacao
     else{
         float coeficienteAngular = deltaY/deltaX;
         float coeficienteLinear = y1 - coeficienteAngular*float(x1);
@@ -59,22 +63,23 @@ void bresenham1(int x1, int y1, int x2, int y2)
     }
 }
 
-void triangle(int *ponto1, int *ponto2, int *ponto3){
+void draw_triangle(int *ponto1, int *ponto2, int *ponto3){
     //cada ponto tera um x,y e se ligara ao outro
 
-    bresenham1(ponto1[0], ponto1[1], ponto2[0], ponto2[1]);
-    bresenham1(ponto2[0], ponto2[1], ponto3[0], ponto3[1]);
-    bresenham1(ponto3[0], ponto3[1], ponto1[0], ponto1[1]);
+    draw_line(ponto1[0], ponto1[1], ponto2[0], ponto2[1]);
+    draw_line(ponto2[0], ponto2[1], ponto3[0], ponto3[1]);
+    //draw_line(ponto3[0], ponto3[1], ponto1[0], ponto1[1]);
+
 }
 //*****************************************************************************
 
-void rectangle(int *origem, int comprimento, int altura){
+void draw_rectangle(int *origem, int comprimento, int altura){
     //a partir da origem desenha o triangulo
 
-    bresenham1(origem[0], origem[1], origem[0]+comprimento, origem[1]);
-    bresenham1(origem[0]+comprimento, origem[1], origem[0]+comprimento, origem[1]+altura);
-    bresenham1(origem[0]+comprimento, origem[1]+altura, origem[0], origem[1]+altura);
-    bresenham1(origem[0], origem[1]+altura, origem[0], origem[1]);
+    draw_line(origem[0], origem[1], origem[0]+comprimento, origem[1]);
+    draw_line(origem[0]+comprimento, origem[1], origem[0]+comprimento, origem[1]+altura);
+    draw_line(origem[0]+comprimento, origem[1]+altura, origem[0], origem[1]+altura);
+    draw_line(origem[0], origem[1]+altura, origem[0], origem[1]);
 }
 
 #endif // _MYGL_H_
