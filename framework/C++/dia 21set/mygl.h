@@ -52,11 +52,11 @@ void draw_line(int x1, int y1, int x2, int y2)
     }
     // encontrando a equacao
     else{
-        float coeficienteAngular = deltaY/deltaX;
+        float coeficienteAngular = float(deltaY)/float(deltaX);
         float coeficienteLinear = y1 - coeficienteAngular*float(x1);
-
+        //printf("[%.2f e %.2f]", coeficienteAngular, coeficienteLinear);
         for (int i = x1; i <= x2; i++){
-            int j = round(coeficienteAngular*float(i) + coeficienteLinear);
+            int j = coeficienteAngular*i + coeficienteLinear;
             //printf("%d e %d", i, j);
             put_pixel(i, j);
         }
