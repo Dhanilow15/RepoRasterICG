@@ -1,11 +1,6 @@
 #ifndef _MYGL_H_
 #define _MYGL_H_
 
-#define _R 255
-#define _G 255
-#define _B 255
-#define _A 255
-
 #include "definitions.h"
 #include <math.h>
 using namespace std;
@@ -39,11 +34,16 @@ void draw_line(int x1, int y1, int x2, int y2)
     }
 
     // reta vertical
-    if(deltaX == 0){
+    if(deltaX == 0 && y1<=y2){
         for (int i = y1; i <= y2; i++){
             put_pixel(x1, i);
         }
+    }else if(deltaX == 0 && y1>y2){
+        for (int i = y2; i <= y1; i++){
+            put_pixel(x1, i);
+        }
     }
+
     // reta horizontal
     else if(deltaY == 0){
         for (int i = x1; i <= x2; i++){
@@ -74,7 +74,6 @@ void draw_triangle(int *ponto1, int *ponto2, int *ponto3){
 //*****************************************************************************
 
 void draw_rectangle(int *origem, int comprimento, int altura){
-    //a partir da origem desenha o triangulo
 
     draw_line(origem[0], origem[1], origem[0]+comprimento, origem[1]);
     draw_line(origem[0]+comprimento, origem[1], origem[0]+comprimento, origem[1]+altura);
