@@ -53,7 +53,6 @@ void bresenham1(int x1, int y1, int x2, int y2)
 
         for (int i = x1; i <= x2; i++){
             int j = round(coeficienteAngular*float(i) + coeficienteLinear);
-            //printf("%d e %d", i, j);
             put_pixel(i, j);
         }
     }
