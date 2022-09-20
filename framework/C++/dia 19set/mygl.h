@@ -36,9 +36,13 @@ void bresenham1(int x1, int y1, int x2, int y2)
         bresenham1(x2, y2, x1, y1);
         return;
     }
-
-    if(deltaX == 0){
+    if(deltaX == 0 && y1 <= y2){
         for (int i = y1; i <= y2; i++){
+            put_pixel(x1, i);
+        }
+    }
+    else if(deltaX == 0 && y1 > y2){
+        for (int i = y2; i <= y1; i++){
             put_pixel(x1, i);
         }
     }

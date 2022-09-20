@@ -34,13 +34,13 @@ void draw_line(int x1, int y1, int x2, int y2)
     }
 
     // reta vertical
-    if(deltaX == 0){
-        if(y1 > y2){
-            int aux = y1;
-            y1 = y2;
-            y2 = y1;
-        }
+    if(deltaX == 0 && y1 <= y2){
         for (int i = y1; i <= y2; i++){
+            put_pixel(x1, i);
+        }
+    }
+    else if(deltaX == 0 && y1 > y2){
+        for (int i = y2; i <= y1; i++){
             put_pixel(x1, i);
         }
     }
