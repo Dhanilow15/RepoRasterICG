@@ -54,10 +54,13 @@ class App:
         :return: None
         """
         running = True
+        # getting display events
         while running:
             for event in pg.event.get():
+                # exit event
                 if event.type == pg.QUIT:
                     running = False
+                # background color change event
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_SPACE:
                         self.RGBA[0] = 1
@@ -118,14 +121,6 @@ class Triangle:
         """
         glDeleteVertexArrays(1, (self.vao,))
         glDeleteBuffers(1, (self.vbo,))
-
-class Background:
-    def __init__(self):
-        pass
-
-    def change_background(self, key, x, y):
-        if key == ' ':
-            print('Oe!')
 
 
 if __name__ == "__main__":
