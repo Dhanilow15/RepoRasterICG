@@ -45,7 +45,32 @@ class App:
         # initializing OpenGL
         self.shader = create_shader("shaders/vertex.txt", "shaders/fragment.txt")
         glUseProgram(self.shader)
-        self.triangle = Triangle()
+        self.triangle = Triangle((-0.4, 0.2, 0.0, 1.0, 0.4, 0.2,
+            0.4, 0.2, 0.0, 1.0, 0.4, 0.2,
+            0.0, 0.5, 0.0, 1.0, 0.4, 0.2))
+
+        self.wall1 = Triangle((-0.4, 0.2, 0.0, 0.0, 0.5, 0.3,
+            0.4, 0.2, 0.0, 0.0, 0.5, 0.3,
+            -0.4, -0.4, 0.0, 0.0, 0.5, 0.3,))
+        self.wall2 = Triangle((0.4, 0.2, 0.0, 0.0, 0.5, 0.3,
+            -0.4, -0.4, 0.0, 0.0, 0.5, 0.3,
+            0.4, -0.4, 0.0, 0.0, 0.5, 0.3))
+
+        self.door1 = Triangle((-0.25, 0.0, 0.0, 0.5, 0.2, 0.0,
+            -0.25, -0.4, 0.0, 0.5, 0.2, 0.0,
+            -0.05, -0.4, 0.0, 0.5, 0.2, 0.0))
+        self.door2 = Triangle((-0.25, 0.0, 0.0, 0.5, 0.2, 0.0,
+            -0.05, 0.0, 0.0, 0.5, 0.2, 0.0,
+            -0.05, -0.4, 0.0, 0.5, 0.2, 0.0))
+
+        self.window1 = Triangle((0.1, 0.0, 0.0, 0.0, 0.0, 0.4,
+            0.3, 0.0, 0.0, 0.0, 0.0, 0.4,
+            0.1, -0.2, 0.0, 0.0, 0.0, 0.4))
+        self.window2 = Triangle((0.1, -0.2, 0.0, 0.0, 0.0, 0.3,
+            0.3, -0.2, 0.0, 0.0, 0.0, 0.3,
+            0.3, 0.0, 0.0, 0.0, 0.0, 0.3))
+        #self.doow2 = Triangle(())
+        #self.rectangle = Rectangle()
         self.main_loop()
 
     def main_loop(self):
@@ -70,10 +95,26 @@ class App:
             glClearColor(self.RGBA[0], self.RGBA[1], self.RGBA[2], self.RGBA[3])
             glClear(GL_COLOR_BUFFER_BIT)
 
+            # drawing house
             glUseProgram(self.shader)
             glBindVertexArray(self.triangle.vao)
             glDrawArrays(GL_TRIANGLES, 0, self.triangle.vertices_count)
-
+            glBindVertexArray(self.wall1.vao)
+            glDrawArrays(GL_TRIANGLES, 0, self.wall1.vertices_count)
+            glBindVertexArray(self.wall2.vao)
+            glDrawArrays(GL_TRIANGLES, 0, self.wall2.vertices_count)
+            glBindVertexArray(self.door1.vao)
+            glDrawArrays(GL_TRIANGLES, 0, self.door1.vertices_count)
+            glBindVertexArray(self.door2.vao)
+            glDrawArrays(GL_TRIANGLES, 0, self.door2.vertices_count)
+            glBindVertexArray(self.window1.vao)
+            glDrawArrays(GL_TRIANGLES, 0, self.window1.vertices_count)
+            glBindVertexArray(self.window2.vao)
+            glDrawArrays(GL_TRIANGLES, 0, self.window2.vertices_count)
+            """
+            glBindVertexArray(self.rectangle.vao)
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0)
+            """
             pg.display.flip()
 
             # timing
@@ -90,13 +131,9 @@ class App:
 
 class Triangle:
 
-    def __init__(self):
+    def __init__(self, vertices):
         """x, y, z, r, g, b"""
-        self.vertices = (
-            -0.4, 0.2, 0.0, 1.0, 0.4, 0.2,
-            0.4, 0.2, 0.0, 1.0, 0.4, 0.2,
-            0.0, 0.5, 0.0, 1.0, 0.4, 0.2
-        )
+        self.vertices = vertices
         self.vertices = np.array(self.vertices, dtype=np.float32)
         self.vertices_count = 3
 
@@ -109,10 +146,10 @@ class Triangle:
         glBufferData(GL_ARRAY_BUFFER, self.vertices.nbytes, self.vertices, GL_STATIC_DRAW)
         # position attribute
         glEnableVertexAttribArray(0)
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_TRUE, 24, ctypes.c_void_p(0))
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 24, ctypes.c_void_p(0))
         # color attribute
         glEnableVertexAttribArray(1)
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, 24, ctypes.c_void_p(12))
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 24, ctypes.c_void_p(12))
 
     def destroy(self):
         """
@@ -121,6 +158,53 @@ class Triangle:
         """
         glDeleteVertexArrays(1, (self.vao,))
         glDeleteBuffers(1, (self.vbo,))
+
+class Rectangle:
+    def __init__(self):
+        """x, y, z, r, g, b"""
+        self.vertices = (
+            -0.4, 0.2, 0.0, 0.0, 0.5, 0.3,
+            0.4, 0.2, 0.0, 0.0, 0.5, 0.3,
+            -0.4, -0.4, 0.0, 0.0, 0.5, 0.3,
+            0.4, -0.4, 0.0, 0.0, 0.5, 0.3
+        )
+
+        self.indices = (
+            0, 1, 3, # first triangle
+            1, 2, 3 # second triangle
+        )
+        self.vertices = np.array(self.vertices, dtype=np.float32)
+        self.indices = np.array(self.indices, dtype=np.int32)
+
+        self.vertices_count = 4
+
+        # vao -> vertex array object
+        # vbo -> vertex buffer object
+        self.vao = glGenVertexArrays(1)
+        glBindVertexArray(self.vao)
+
+        self.vbo = glGenBuffers(1)
+        glBindBuffer(GL_ARRAY_BUFFER, self.vbo)
+        glBufferData(GL_ARRAY_BUFFER, self.vertices.nbytes, self.vertices, GL_STATIC_DRAW)
+
+        self.ebo = glGenBuffers(1)
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self.vbo)
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, self.indices.nbytes, self.vertices, GL_STATIC_DRAW)
+        # position attribute
+        glEnableVertexAttribArray(0)
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 24, ctypes.c_void_p(0))
+        # color attribute
+        glEnableVertexAttribArray(1)
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 24, ctypes.c_void_p(12))
+
+    def destroy(self):
+        """
+        Function to release allocated memory
+        :return: None
+        """
+        glDeleteVertexArrays(1, (self.vao,))
+        glDeleteBuffers(1, (self.vbo,))
+        glDeleteBuffers(1, (self.ebo,))
 
 
 if __name__ == "__main__":
