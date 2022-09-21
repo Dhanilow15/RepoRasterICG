@@ -31,25 +31,21 @@ def create_shader(vertexFilepath, fragmentFilepath):
 
 class App:
 
-    def __init__(self, vertices=(
-            -0.5, -0.5, 0.0, 1.0, 0.0, 0.0,
-            0.5, -0.5, 0.0, 0.0, 1.0, 0.0,
-            0.0, -1.0, 0.0, 0.0, 0.0, 1.0
-    )):
+    def __init__(self):
         """
         Initializing Python and OpenGL
         """
         # initializing python
+        self.RGBA = [0, 0, 0, 1]
         pg.init()
-        display = (600, 600)
+        display = (512, 512)
         pg.display.set_mode(display, DOUBLEBUF | OPENGL)
         #   pg.display._set_caption("Sample OpenGL")
         self.clock = pg.time.Clock()
         # initializing OpenGL
-        glClearColor(0, 0, 0, 1)
         self.shader = create_shader("shaders/vertex.txt", "shaders/fragment.txt")
         glUseProgram(self.shader)
-        self.triangle = Triangle(vertices)
+        self.triangle = Triangle()
         self.main_loop()
 
     def main_loop(self):
@@ -62,8 +58,13 @@ class App:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     running = False
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_SPACE:
+                        self.RGBA[0] = 1
+                        self.RGBA[3] = 1
 
             # refresh screen
+            glClearColor(self.RGBA[0], self.RGBA[1], self.RGBA[2], self.RGBA[3])
             glClear(GL_COLOR_BUFFER_BIT)
 
             glUseProgram(self.shader)
@@ -85,9 +86,14 @@ class App:
 
 
 class Triangle:
-    def __init__(self, vertices):
+
+    def __init__(self):
         """x, y, z, r, g, b"""
-        self.vertices = vertices
+        self.vertices = (
+            -0.4, 0.2, 0.0, 1.0, 0.4, 0.2,
+            0.4, 0.2, 0.0, 1.0, 0.4, 0.2,
+            0.0, 0.5, 0.0, 1.0, 0.4, 0.2
+        )
         self.vertices = np.array(self.vertices, dtype=np.float32)
         self.vertices_count = 3
 
@@ -113,10 +119,14 @@ class Triangle:
         glDeleteVertexArrays(1, (self.vao,))
         glDeleteBuffers(1, (self.vbo,))
 
+class Background:
+    def __init__(self):
+        pass
+
+    def change_background(self, key, x, y):
+        if key == ' ':
+            print('Oe!')
+
 
 if __name__ == "__main__":
-    myApp = App((
-        -0.5, -0.5, 0.0, 1.0, 0.0, 0.0,
-        0.5, -0.5, 0.0, 0.0, 1.0, 0.0,
-        0.0, -1.0, 0.0, 0.0, 0.0, 1.0
-    ))
+    myApp = App()

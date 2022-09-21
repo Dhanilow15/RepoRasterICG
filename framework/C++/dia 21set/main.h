@@ -6,10 +6,46 @@
 #include "definitions.h"
 
 GLuint tex;
+//background starting color
+float bcgR = 0.0, bcgG = 0.0, bcgB = 0.0, bcgA = 0.0;
 
 void (*DrawFunc)(void);
 
 //*****************************************************************************
+void house(){
+    float ponto1[2], ponto2[2], ponto3[2], ponto4[2], ponto5[2], ponto6[2];
+    
+    ponto1[0] = 125;
+    ponto1[1] = 225;
+    
+    ponto2[0] = 225;
+    ponto2[1] = 225;
+
+    ponto3[0] = 175;
+    ponto3[1] = 175;
+
+    ponto4[0] = 125;
+    ponto4[1] = 225;
+
+    ponto5[0] = ponto4[0] + int(COMPRIMENTO/3);
+    ponto5[1] = ponto4[1] + int(ALTURA);
+
+    ponto6[0] = 260;
+    ponto6[1] = 250;
+
+    //telhado
+    glBegin(GL_TRIANGLES);
+        glColor3f(0.7f, 0.5f, 0.1f);
+        glVertex2f(0, 0.5);
+		glColor3f(0.7f, 0.5f, 0.1f);
+        glVertex2f(-0.5, -0.5);
+		glColor3f(0.7f, 0.5f, 0.1f);
+        glVertex2f(0.5, -0.3);
+    glEnd();
+
+	
+}
+
 void display(void)
 {
 	DrawFunc();
@@ -21,11 +57,12 @@ void display(void)
 	glEnable(GL_TEXTURE_2D);
 
 	// Desenha o quadrilátero com a textura mapeada
+	glClearColor(bcgR, bcgG, bcgB, bcgA);
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glutPostRedisplay();
 
 	glViewport(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT);
-
+	/**
 	glBegin(GL_TRIANGLES);
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex3f(-1.0f,-1.0f, 0.0f);
@@ -40,13 +77,14 @@ void display(void)
 		glTexCoord2f(1.0f, 0.0f);	
 		glVertex3f( 1.0f, 1.0f, 0.0f);
 	glEnd();
+	**/
 	
+	house();
+
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
 
-	glFlush();
 	glutSwapBuffers();
-	glutPostRedisplay();
 }
 
 //*****************************************************************************
@@ -67,7 +105,8 @@ void InitOpenGL(int *argc, char **argv)
 	glutInitWindowSize(IMAGE_WIDTH, IMAGE_HEIGHT);
 	glutInitWindowPosition(100,100);
 	glutCreateWindow("My OpenGL");
-
+	glEnable(GL_COLOR_MATERIAL);
+	
 	// Ajusta a projeção ortográfica.
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();

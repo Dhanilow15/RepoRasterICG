@@ -81,4 +81,14 @@ void draw_rectangle(int *origem, int comprimento, int altura){
     draw_line(origem[0], origem[1]+altura, origem[0], origem[1]);
 }
 
+void change_background(unsigned char key, int x, int y){
+    // background change if spacebar is pressed
+    if (key == ' ')
+    {
+        puts("po");
+        printf("%f", bcgR);
+        bcgR = 1.0;
+        bcgB = 0.7;
+    }
+}
 #endif // _MYGL_H_
