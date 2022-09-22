@@ -69,8 +69,7 @@ class App:
         self.window2 = Triangle((0.1, -0.2, 0.0, 0.0, 0.0, 0.3,
             0.3, -0.2, 0.0, 0.0, 0.0, 0.3,
             0.3, 0.0, 0.0, 0.0, 0.0, 0.3))
-        #self.doow2 = Triangle(())
-        #self.rectangle = Rectangle()
+
         self.main_loop()
 
     def main_loop(self):
