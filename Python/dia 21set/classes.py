@@ -131,13 +131,9 @@ class App:
 
 class Triangle:
 
-    def __init__(self):
+    def __init__(self, vertices):
         """x, y, z, r, g, b"""
-        self.vertices = (
-            -0.4, 0.2, 0.0, 1.0, 0.4, 0.2,
-            0.4, 0.2, 0.0, 1.0, 0.4, 0.2,
-            0.0, 0.5, 0.0, 1.0, 0.4, 0.2
-        )
+        self.vertices = vertices
         self.vertices = np.array(self.vertices, dtype=np.float32)
         self.vertices_count = 3
 
@@ -150,10 +146,10 @@ class Triangle:
         glBufferData(GL_ARRAY_BUFFER, self.vertices.nbytes, self.vertices, GL_STATIC_DRAW)
         # position attribute
         glEnableVertexAttribArray(0)
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_TRUE, 24, ctypes.c_void_p(0))
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 24, ctypes.c_void_p(0))
         # color attribute
         glEnableVertexAttribArray(1)
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, 24, ctypes.c_void_p(12))
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 24, ctypes.c_void_p(12))
 
     def destroy(self):
         """
