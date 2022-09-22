@@ -62,8 +62,25 @@ class App:
                     running = False
                 # background color change event
                 if event.type == pg.KEYDOWN:
+                    # space = black
                     if event.key == pg.K_SPACE:
+                        self.RGBA[0] = 0
+                        self.RGBA[1] = 0
+                        self.RGBA[2] = 0
+                        self.RGBA[3] = 1
+                    # special keys = gray
+                    elif event.key <= 47 or event.key in range(59,65) and event.key != pg.K_SPACE or \
+                            event.key in range(92,97) \
+                            or event.key >= 123:
+                        self.RGBA[0] = 0.5
+                        self.RGBA[1] = 0.5
+                        self.RGBA[2] = 0.5
+                        self.RGBA[3] = 1
+                    # others = white
+                    else:
                         self.RGBA[0] = 1
+                        self.RGBA[1] = 1
+                        self.RGBA[2] = 1
                         self.RGBA[3] = 1
 
             # refresh screen
@@ -121,6 +138,10 @@ class Triangle:
         """
         glDeleteVertexArrays(1, (self.vao,))
         glDeleteBuffers(1, (self.vbo,))
+
+
+class Rectangle:
+    pass
 
 
 if __name__ == "__main__":
