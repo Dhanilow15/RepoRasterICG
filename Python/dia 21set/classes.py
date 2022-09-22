@@ -111,9 +111,22 @@ class App:
             glClearColor(self.RGBA[0], self.RGBA[1], self.RGBA[2], self.RGBA[3])
             glClear(GL_COLOR_BUFFER_BIT)
 
+            # drawing house
             glUseProgram(self.shader)
             glBindVertexArray(self.triangle.vao)
             glDrawArrays(GL_TRIANGLES, 0, self.triangle.vertices_count)
+            glBindVertexArray(self.wall1.vao)
+            glDrawArrays(GL_TRIANGLES, 0, self.wall1.vertices_count)
+            glBindVertexArray(self.wall2.vao)
+            glDrawArrays(GL_TRIANGLES, 0, self.wall2.vertices_count)
+            glBindVertexArray(self.door1.vao)
+            glDrawArrays(GL_TRIANGLES, 0, self.door1.vertices_count)
+            glBindVertexArray(self.door2.vao)
+            glDrawArrays(GL_TRIANGLES, 0, self.door2.vertices_count)
+            glBindVertexArray(self.window1.vao)
+            glDrawArrays(GL_TRIANGLES, 0, self.window1.vertices_count)
+            glBindVertexArray(self.window2.vao)
+            glDrawArrays(GL_TRIANGLES, 0, self.window2.vertices_count)
 
             pg.display.flip()
 
