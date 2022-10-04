@@ -9,7 +9,7 @@ void MyGlDraw(void)
     
     ponto1[0] = 125;
     ponto1[1] = 225;
-    
+
     ponto2[0] = 225;
     ponto2[1] = 225;
 

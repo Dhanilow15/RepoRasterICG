@@ -64,9 +64,10 @@ OBJECT *Translado(OBJECT *objeto, VERTEX *incremento)
     /**Funcao que vai retornar o objeto transladado no espaço cartesiano**/
 
     // instanciando o objeto transladado
-    OBJECT *objetoTransladado = (OBJECT *)malloc(sizeof(OBJECT));
-    objetoTransladado->nrvertices = object->nrvertices
-    objetoTransladado->vertices = (VERTEX *)malloc(obj->nrvertices * sizeof(VERTEX));
+    OBJECT *objetoTransladado;
+    objetoTransladado = create_object();
+    objetoTransladado->nrvertices = object->nrvertices;
+    objetoTransladado->vertices = (VERTEX *)malloc(objeto->nrvertices * sizeof(VERTEX));
     
     // criando a matriz de translacao
     int matrizTranslacao[3][3] = {{1, 0, incremento->x},
@@ -75,14 +76,15 @@ OBJECT *Translado(OBJECT *objeto, VERTEX *incremento)
     
     // objetoTransladado = matriz * objeto
     // P' = T * P
+    int matrizPlinha[3][1], matrizP[3][1];
     for(int i = 0; i < objeto->nrvertices; i++)
     {
-        matrizPlinha[3][1] = {{0},
+        int matrizPlinha[3][1] = {{0},
                               {0},
                               {1}};
-        matrizP[3][1] = {{objeto->vertices->x[i]},
-                         {objeto->vertices->y[i]},
-                         {1}}
+        int matrizP[3][1] = {{objeto->vertices[i].x},
+                         {objeto->vertices[i].y},
+                         {1}};
         // fazendo a multiplicacao entre as matrizes
         for(int j = 0; j < 3; j++)
         {
@@ -95,7 +97,7 @@ OBJECT *Translado(OBJECT *objeto, VERTEX *incremento)
         objetoTransladado->vertices[i].x = matrizPlinha[0][0];
         objetoTransladado->vertices[i].y = matrizPlinha[1][0];
     }
-    return *objetoTransladado;
+    return objetoTransladado;
 }
 
 VERTEX calculate_centroid(OBJECT *obj)

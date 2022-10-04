@@ -1,7 +1,7 @@
 #ifndef _DEFINITIONS_H_
 #define _DEFINITIONS_H_
 
-#define _R 255
+#define _R 0
 #define _G 255
 #define _B 255
 #define _A 255
