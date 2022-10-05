@@ -32,9 +32,10 @@ struct OBJECT
 int t_x = 0; 
 int t_y = 0;
 
+VERTEX *x_y_inc = (VERTEX *)malloc(sizeof(VERTEX));
+
 int t_x_inc = 0; 
 int t_y_inc = 0;
-int xyz_inc_vector[3] = {0, 0, 0};
 
 float xScale = 1;
 float yScale = 1;
@@ -56,19 +57,19 @@ OBJECT *create_object()
     obj->vertices[3].y = 170;
     obj->vertices[4].x = 190;
     obj->vertices[4].y = 130;
+
     return obj;
 }
 
-OBJECT *Translado(OBJECT *objeto, VERTEX *incremento)
+OBJECT *transladar_objeto(OBJECT *objeto, VERTEX *incremento)
 {
     /**Funcao que vai retornar o objeto transladado no espaço cartesiano**/
 
     // instanciando o objeto transladado
-    OBJECT *objetoTransladado;
-    objetoTransladado = create_object();
+    OBJECT *objetoTransladado =(OBJECT *)malloc(sizeof(OBJECT));
     objetoTransladado->nrvertices = object->nrvertices;
     objetoTransladado->vertices = (VERTEX *)malloc(objeto->nrvertices * sizeof(VERTEX));
-    
+
     // criando a matriz de translacao
     int matrizTranslacao[3][3] = {{1, 0, incremento->x},
                                   {0, 1, incremento->y},
@@ -76,21 +77,20 @@ OBJECT *Translado(OBJECT *objeto, VERTEX *incremento)
     
     // objetoTransladado = matriz * objeto
     // P' = T * P
-    int matrizPlinha[3][1], matrizP[3][1];
     for(int i = 0; i < objeto->nrvertices; i++)
     {
         int matrizPlinha[3][1] = {{0},
-                              {0},
-                              {1}};
+                                  {0},
+                                  {1}};
         int matrizP[3][1] = {{objeto->vertices[i].x},
-                         {objeto->vertices[i].y},
-                         {1}};
+                            {objeto->vertices[i].y},
+                            {1}};
         // fazendo a multiplicacao entre as matrizes
         for(int j = 0; j < 3; j++)
         {
             for(int k = 0; k < 3; k++)
             {
-                matrizPlinha[j][0] += matrizTranslacao[j][k] * matrizP[j][0];
+                matrizPlinha[j][0] += matrizTranslacao[j][k] * matrizP[k][0];
             }
         }
         // redefinindo as coordenadas do objeto transladado
@@ -129,10 +129,14 @@ void draw_object(OBJECT *obj)
 {
     int i;
     glBegin(GL_POLYGON); //desenha uma linha
+    // translado do objeto por multiplicacao entre matrizes
+    
+    obj = transladar_objeto(obj, x_y_inc);
     for (i = 0; i < obj->nrvertices; i++)
     {
-        glVertex2i(obj->vertices[i].x + t_x_inc, obj->vertices[i].y + t_y_inc);
+        glVertex2i(obj->vertices[i].x, obj->vertices[i].y);
     }
+    
     glEnd();
 }
 
@@ -142,7 +146,7 @@ void draw_test()
     glMatrixMode(GL_MODELVIEW); //garante que a matrix seja a ModelView
     glLoadIdentity(); //carrega a matrix identidade
     
-    glColor3f(0.0, 0.0, 1.0); //altera o atributo de cor
+    glColor3f(0.7, 0.0, 1.0); //altera o atributo de cor
     
     VERTEX cent = calculate_centroid(object); //calcula o centróide
     
@@ -253,19 +257,23 @@ void keyboard_test2(GLint key, GLint x, GLint y)
         glutFullScreen();
     
     if (key == 100){
-        t_x_inc -= 1; // tecla para esquerda
+        // tecla para esquerda
+        x_y_inc->x -= 1;
     }
     if (key == 102){
-        t_x_inc += 1; // tecla para direita
+        // tecla para direita
+        x_y_inc->x += 1;
     }
     if (key == 103){
-        t_y_inc -= 1; // tecla para baixo
+        // tecla para baixo
+        x_y_inc->y -= 1;
     }
     if (key == 101){
-        t_y_inc += 1; // tecla para cima
+        // tecla para cima
+        x_y_inc->y += 1;
     }
-    printf("\nt_x_inc = %d", t_x_inc);
-    printf("\nt_y_inc = %d\n", t_y_inc);
+    printf("\nx_inc = %d", x_y_inc->x);
+    printf("\ny_inc = %d\n", x_y_inc->y);
     glutPostRedisplay();
 }
 
