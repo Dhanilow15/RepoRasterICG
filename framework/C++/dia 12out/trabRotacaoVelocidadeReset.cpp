@@ -156,7 +156,7 @@ OBJECT *rotacionar_objeto(OBJECT *objeto, float angulo)
         }
         // redefinindo as coordenadas do objeto transladado
         objetoRotacionado->vertices[i].x = matrizPlinha[0][0] + cent.x - cent.x*cosRad + cent.y*senRad;
-        objetoRotacionado->vertices[i].y = matrizPlinha[1][0] + cent.y - cent.x*cosRad - cent.y*senRad;
+        objetoRotacionado->vertices[i].y = matrizPlinha[1][0] + cent.y - cent.x*senRad - cent.y*cosRad;
     }
     return objetoRotacionado;
 }
