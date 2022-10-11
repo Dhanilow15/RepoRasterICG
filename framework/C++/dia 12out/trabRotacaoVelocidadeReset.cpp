@@ -33,14 +33,9 @@ struct OBJECT
 // variável de velocidade
 int speed = 1;
 
-int t_x = 0; 
-int t_y = 0;
 
+// variaveis de translacao
 VERTEX *x_y_inc = (VERTEX *)malloc(sizeof(VERTEX));
-
-// variáveis de translação
-int t_x_inc = 0; 
-int t_y_inc = 0;
 
 // variávei de escala
 float xScale = 1;
@@ -129,11 +124,11 @@ OBJECT *rotacionar_objeto(OBJECT *objeto, float angulo)
 {
     /**Funcao que vai retornar o objeto rotacionado no espaço cartesiano**/
     
-    VERTEX cent = calculate_centroid(objeto);
-
+    VERTEX cent = calculate_centroid(objeto); 
+    
     float cosRad = cos(angulo*PI/180);
     float senRad = sin(angulo*PI/180);
-
+    printf("%.2f e %.2f", cosRad, senRad);
     // instanciando o objeto rotacionado
     OBJECT *objetoRotacionado =(OBJECT *)malloc(sizeof(OBJECT));
     objetoRotacionado->nrvertices = object->nrvertices;
@@ -141,7 +136,7 @@ OBJECT *rotacionar_objeto(OBJECT *objeto, float angulo)
 
     // criando a matriz de translacao
     float matrizRotacao[2][2] = {{cosRad, -senRad},
-                              {senRad, cosRad}};
+                                {senRad, cosRad}};
     
     // objetoRotacionado = matriz * objeto
     // P' = P * R + T 
@@ -173,7 +168,6 @@ void init()
     
     gluOrtho2D(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT);
     object = create_object(); //cria o objeto
-
 }
 
 void draw_object(OBJECT *obj)
@@ -311,7 +305,7 @@ void keyboard_test(GLubyte key, GLint x, GLint y)
     // barra de espaço para resetar tudo
     if (key == 32){
         object = create_object();
-        t_x = t_y = t_x_inc = t_y_inc = theta = 0;
+        x_y_inc->x = x_y_inc->y = theta = 0;
         xScale = yScale = 1;
         
         puts("Objeto e variaveis de transformacao resetados.");
