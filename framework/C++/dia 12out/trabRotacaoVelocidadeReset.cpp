@@ -306,7 +306,7 @@ void keyboard_test(GLubyte key, GLint x, GLint y)
     if (key == 32){
         object = create_object();
         x_y_inc->x = x_y_inc->y = theta = 0;
-        xScale = yScale = 1;
+        speed = xScale = yScale = 1;
         
         puts("Objeto e variaveis de transformacao resetados.");
     }
